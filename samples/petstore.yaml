@@ -1,0 +1,38 @@
+openapi: 3.0.3
+info:
+  title: Pet Store API
+  version: 1.0.0
+paths:
+  /pets:
+    get:
+      summary: List all pets
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          description: Maximum number of pets to return
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: A list of pets
+    post:
+      summary: Add a new pet
+      responses:
+        "201":
+          description: Pet created
+  /pets/{id}:
+    get:
+      summary: Get one pet
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The pet's ID
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: The pet
+        "404":
+          description: Pet not found
