@@ -10,6 +10,9 @@
   <aside class="sidebar">
     <a class="brand" href="/">Docs</a>
     <a class="upload-link" href="/">+ Upload a file</a>
+        <form action="/search" method="get" class="side-search">
+      <input type="search" name="q" placeholder="Search docs…" aria-label="Search docs">
+    </form>
     <nav>
       {% for d in documents %}
         <a href="/view/{{ d.slug }}" class="{{ 'active' if d.slug == current else '' }}">

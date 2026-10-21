@@ -11,6 +11,7 @@ from app.db import (
     get_document_by_slug,
     list_documents,
     save_document,
+    search_documents,
 )
 from app.models import Document
 from app.parser.markdown import parse_markdown
@@ -132,3 +133,14 @@ def view_document(request: Request, slug: str, conn=Depends(get_conn)):
     if doc is None:
         return page(request, "index.html", conn, status_code=404, error="Document not found")
     return page(request, "document.html", conn, doc=doc, current=slug)
+
+# ---------- Search ----------
+
+@app.get("/api/search")
+def api_search(q: str = "", conn=Depends(get_conn)):
+    return [asdict(r) for r in search_documents(conn, q)]
+
+
+@app.get("/search")
+def search_page(request: Request, q: str = "", conn=Depends(get_conn)):
+    return page(request, "search.html", conn, q=q, results=search_documents(conn, q))

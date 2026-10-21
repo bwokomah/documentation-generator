@@ -32,3 +32,11 @@ button { padding: .5rem 1rem; color: #fff; background: #2563eb; border: 0; borde
 button:hover { background: #1d4ed8; }
 .upload-link { display: block; margin-top: .75rem; padding: .45rem .6rem; text-align: center; color: #fff; background: #2563eb; border-radius: 6px; text-decoration: none; font-size: .9rem; }
 .upload-link:hover { background: #1d4ed8; }
+.side-search { margin-top: .75rem; }
+.side-search input { width: 100%; padding: .45rem .6rem; border: 1px solid #d1d5db; border-radius: 6px; }
+.search-form { display: flex; gap: .75rem; margin: 1rem 0; }
+.search-form input { flex: 1; padding: .5rem .75rem; border: 1px solid #d1d5db; border-radius: 6px; }
+.result { padding: .75rem 0; border-bottom: 1px solid #e5e7eb; }
+.result > a { font-weight: 600; color: #2563eb; text-decoration: none; }
+.result p { margin: .25rem 0 0; }
+mark { background: #fef08a; padding: 0 .1rem; border-radius: 2px; }
