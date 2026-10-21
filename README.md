@@ -2,7 +2,7 @@
 
 Upload Markdown files or OpenAPI specs and get a searchable documentation website.
 
-**Live demo:** [YOUR-LIVE-URL](http://127.0.0.1:8000/)
+**Live demo:** https://documentation-generator-t1ge.onrender.com/
 **Team:** Bright (lead), Amanda
 
 ## Features
