@@ -12,6 +12,18 @@ Upload Markdown files or OpenAPI specs and get a searchable documentation websit
 - Sidebar navigation, delete button, sample data loaded automatically
 - Clear errors for bad input (empty file, invalid OpenAPI, wrong type, too large, not UTF-8)
 
+## Screenshots
+
+![Home page with upload form](docs/screenshots/home.png)
+
+![Rendered Markdown page](docs/screenshots/markdown.png)
+
+![Rendered OpenAPI page](docs/screenshots/api.png)
+
+![Search results](docs/screenshots/search.png)
+
+![Search results](docs/screenshots/docsAPIexplorer.png)
+
 ## Tech stack
 Python, FastAPI, Jinja2, markdown-it-py, PyYAML, openapi-spec-validator, SQLite (FTS5 for search), pytest.
 
