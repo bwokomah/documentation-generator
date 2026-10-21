@@ -40,3 +40,6 @@ button:hover { background: #1d4ed8; }
 .result > a { font-weight: 600; color: #2563eb; text-decoration: none; }
 .result p { margin: .25rem 0 0; }
 mark { background: #fef08a; padding: 0 .1rem; border-radius: 2px; }
+.delete-form { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid #e5e7eb; }
+button.danger { background: #dc2626; }
+button.danger:hover { background: #b91c1c; }

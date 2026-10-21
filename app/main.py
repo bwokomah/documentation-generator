@@ -1,3 +1,7 @@
+import os
+from contextlib import asynccontextmanager
+from app.seed import seed
+
 from dataclasses import asdict
 from pathlib import Path
 
@@ -25,7 +29,15 @@ OPENAPI_EXTENSIONS = (".yaml", ".yml", ".json")
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
-app = FastAPI(title="Documentation Generator")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """On startup, load the sample docs if the database is empty."""
+    if os.environ.get("SEED_SAMPLES", "1") == "1":
+        seed(get_conn())
+    yield
+
+
+app = FastAPI(title="Documentation Generator", lifespan=lifespan)
 app.mount("/static", StaticFiles(directory=PROJECT_ROOT / "static"), name="static")
 
 _conn = None
@@ -144,3 +156,8 @@ def api_search(q: str = "", conn=Depends(get_conn)):
 @app.get("/search")
 def search_page(request: Request, q: str = "", conn=Depends(get_conn)):
     return page(request, "search.html", conn, q=q, results=search_documents(conn, q))
+
+@app.post("/delete/{slug}")
+def delete_form(slug: str, conn=Depends(get_conn)):
+    delete_document(conn, slug)
+    return RedirectResponse("/", status_code=303)

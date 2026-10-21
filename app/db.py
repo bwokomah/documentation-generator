@@ -1,3 +1,4 @@
+import os
 import html
 import json
 import re
@@ -5,7 +6,7 @@ import sqlite3
 
 from app.models import Document, Endpoint, SearchResult, Section
 
-DB_PATH = "docgen.db"
+DB_PATH = os.environ.get("DATABASE_PATH", "docgen.db")
 
 # Control characters that mark matches inside snippets. They are swapped for
 # <mark> tags only after the text has been HTML-escaped.

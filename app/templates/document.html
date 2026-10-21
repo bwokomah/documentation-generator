@@ -63,4 +63,8 @@
   {% endfor %}
 
 {% endif %}
+<form action="/delete/{{ doc.slug }}" method="post" class="delete-form"
+      onsubmit="return confirm('Delete this document?')">
+  <button type="submit" class="danger">Delete this document</button>
+</form>
 {% endblock %}
