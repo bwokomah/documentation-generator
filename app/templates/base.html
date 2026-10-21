@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Documentation Generator{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="/">Docs</a>
+    <a class="upload-link" href="/">+ Upload a file</a>
+    <nav>
+      {% for d in documents %}
+        <a href="/view/{{ d.slug }}" class="{{ 'active' if d.slug == current else '' }}">
+          <span class="tag {{ d.source_type }}">{{ 'API' if d.source_type == 'openapi' else 'MD' }}</span>{{ d.title }}
+        </a>
+      {% else %}
+        <p class="muted">No documents yet.</p>
+      {% endfor %}
+    </nav>
+  </aside>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

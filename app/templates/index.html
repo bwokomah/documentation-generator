@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Documentation Generator</h1>
+<p>Upload a Markdown file or an OpenAPI spec (.md, .yaml, .yml, .json) to turn it into browsable docs.</p>
+
+{% if error %}<p class="error">{{ error }}</p>{% endif %}
+
+<form action="/upload" method="post" enctype="multipart/form-data" class="upload">
+  <input type="file" name="file" accept=".md,.markdown,.yaml,.yml,.json" required>
+  <button type="submit">Upload</button>
+</form>
+{% endblock %}

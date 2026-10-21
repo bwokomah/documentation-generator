@@ -16,35 +16,36 @@ def parse_markdown(text: str, filename: str = "untitled.md") -> Document:
     if not text or not text.strip():
         raise ValueError("Markdown file is empty")
 
+    lines = text.splitlines()
     tokens = MarkdownIt().parse(text)
-    sections: list[Section] = []
-    current = None
-    i = 0
 
-    while i < len(tokens):
-        tok = tokens[i]
-
+    # Find every heading and the line numbers it occupies
+    headings = []
+    for i, tok in enumerate(tokens):
         if tok.type == "heading_open":
-            # tokens[i] = heading_open, [i+1] = the heading text, [i+2] = heading_close
-            current = Section(heading=tokens[i + 1].content, level=int(tok.tag[1]), body="")
-            sections.append(current)
-            i += 3
-            continue
+            headings.append({
+                "heading": tokens[i + 1].content,
+                "level": int(tok.tag[1]),
+                "start": tok.map[0],
+                "end": tok.map[1],
+            })
 
-        if tok.type in ("inline", "fence", "code_block"):
-            if current is None:
-                # text that appears before the first heading
-                current = Section(heading="Introduction", level=1, body="")
-                sections.append(current)
-            current.body += tok.content + "\n"
+    sections: list[Section] = []
 
-        i += 1
+    # Text before the first heading becomes an "Introduction" section
+    first_start = headings[0]["start"] if headings else len(lines)
+    intro = "\n".join(lines[:first_start]).strip()
+    if intro:
+        sections.append(Section(heading="Introduction", level=2, body=intro))
 
-    for section in sections:
-        section.body = section.body.strip()
+    # Each section's body is the original Markdown up to the next heading
+    for n, h in enumerate(headings):
+        next_start = headings[n + 1]["start"] if n + 1 < len(headings) else len(lines)
+        body = "\n".join(lines[h["end"]:next_start]).strip()
+        sections.append(Section(heading=h["heading"], level=h["level"], body=body))
 
     # Title = first level-1 heading, otherwise the file name
-    title = next((s.heading for s in sections if s.level == 1), Path(filename).stem)
+    title = next((h["heading"] for h in headings if h["level"] == 1), Path(filename).stem)
 
     return Document(
         title=title,

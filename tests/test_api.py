@@ -60,3 +60,43 @@ def test_delete_document(client):
     upload(client, "samples/getting-started.md", "getting-started.md", "text/markdown")
     assert client.delete("/api/documents/getting-started").status_code == 204
     assert client.get("/api/documents/getting-started").status_code == 404
+
+def test_home_page_loads(client):
+    res = client.get("/")
+    assert res.status_code == 200
+    assert "Upload" in res.text
+
+
+def test_form_upload_redirects_to_rendered_page(client):
+    with open("samples/getting-started.md", "rb") as f:
+        res = client.post(
+            "/upload",
+            files={"file": ("getting-started.md", f.read(), "text/markdown")},
+            follow_redirects=False,
+        )
+    assert res.status_code == 303
+    page = client.get(res.headers["location"])
+    assert page.status_code == 200
+    assert "Installation" in page.text
+
+
+def test_openapi_page_shows_endpoints(client):
+    upload(client, "samples/petstore.yaml", "petstore.yaml", "application/yaml")
+    page = client.get("/view/pet-store-api")
+    assert "/pets/{id}" in page.text
+    assert "Pet not found" in page.text
+
+
+def test_form_upload_shows_error_for_bad_file(client):
+    res = client.post("/upload", files={"file": ("bad.yaml", b"hello: world", "application/yaml")})
+    assert res.status_code == 422
+    assert "Invalid OpenAPI spec" in res.text
+
+
+def test_raw_html_in_markdown_is_escaped(client):
+    client.post(
+        "/api/documents",
+        files={"file": ("x.md", b"# Hi\n\n<script>alert(1)</script>\n", "text/markdown")},
+    )
+    page = client.get("/view/hi")
+    assert "<script>alert(1)</script>" not in page.text

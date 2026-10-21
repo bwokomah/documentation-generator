@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}{{ doc.title }}{% endblock %}
+{% block content %}
+
+{% if doc.source_type == 'markdown' %}
+
+  <nav class="toc">
+    <strong>On this page</strong>
+    {% for s in doc.sections %}
+      <a href="#s{{ loop.index }}" class="level-{{ s.level }}">{{ s.heading }}</a>
+    {% endfor %}
+  </nav>
+
+  {% for s in doc.sections %}
+    <section id="s{{ loop.index }}">
+      <h{{ [s.level, 6] | min }}>{{ s.heading }}</h{{ [s.level, 6] | min }}>
+      {{ s.body | markdown }}
+    </section>
+  {% endfor %}
+
+{% else %}
+
+  <h1>{{ doc.title }}</h1>
+
+  <nav class="toc">
+    <strong>Endpoints</strong>
+    {% for e in doc.endpoints %}
+      <a href="#e{{ loop.index }}"><span class="method {{ e.method | lower }}">{{ e.method }}</span> {{ e.path }}</a>
+    {% endfor %}
+  </nav>
+
+  {% for e in doc.endpoints %}
+    <section class="endpoint" id="e{{ loop.index }}">
+      <h3><span class="method {{ e.method | lower }}">{{ e.method }}</span> <code>{{ e.path }}</code></h3>
+      {% if e.summary %}<p class="summary">{{ e.summary }}</p>{% endif %}
+      {{ e.description | markdown }}
+
+      {% if e.parameters %}
+        <h4>Parameters</h4>
+        <table>
+          <tr><th>Name</th><th>In</th><th>Required</th><th>Description</th></tr>
+          {% for p in e.parameters %}
+            <tr>
+              <td><code>{{ p.name }}</code></td>
+              <td>{{ p.in }}</td>
+              <td>{{ 'yes' if p.required else 'no' }}</td>
+              <td>{{ p.description }}</td>
+            </tr>
+          {% endfor %}
+        </table>
+      {% endif %}
+
+      {% if e.responses %}
+        <h4>Responses</h4>
+        <table>
+          <tr><th>Status</th><th>Description</th></tr>
+          {% for code, description in e.responses.items() %}
+            <tr><td><code>{{ code }}</code></td><td>{{ description }}</td></tr>
+          {% endfor %}
+        </table>
+      {% endif %}
+    </section>
+  {% endfor %}
+
+{% endif %}
+{% endblock %}
