@@ -3,7 +3,7 @@
 Upload Markdown files or OpenAPI specs and get a searchable documentation website.
 
 **Live demo:** https://documentation-generator-t1ge.onrender.com/
-**Team:** Bright (lead), Amanda
+**Team:** Bright (lead), Amanda, Divine, Oluwalims
 
 ## Features
 - Upload `.md`, `.yaml`, `.yml` or `.json` files through a web form or the API
